@@ -2,9 +2,9 @@
 
 int main()
 {
-	double begN = 0.1; //Начальное значение x
-	double step = 0.01; //Шаг x
-	double finN = 0.2; //Конечное значение x
+	double begN = 0.1; 
+	double step = 0.01; 
+	double finN = 0.2; 
 
 	cout << "    x" << '\t' << '\t' << "classFunc" << '\t' <<  " myFunc" << '\t' << '\t' << "   dFunc"  << endl;
 	for (double x = begN; x < finN+step; x = x + step)
