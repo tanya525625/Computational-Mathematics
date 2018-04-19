@@ -26,7 +26,7 @@ double myFunc (double x)
 
 double mySqrt(double x, int k)   
 {
-	if (k == 0)       
+	if (k == 0)       //Рекурсивный споспоб вычисления квадратного корня
 		return 1;
 	else 
 		return 0.5 * (mySqrt(x, k - 1) + x / mySqrt(x, k - 1));
@@ -35,7 +35,7 @@ double mySqrt(double x, int k)
 double mySin (double x)
 {
 	double sinTerm = 0.74;
-	double y = (pi / 2 - (x + sinTerm)); 
+	double y = (pi / 2 - (x + sinTerm)); //Приведение аргумента для дальнейшего подсчета через косинус
 	int k = 0;
 	double err = abs(pow(y, 2*k) / factorial(2*k));
 	double vych = 0;
@@ -43,7 +43,7 @@ double mySin (double x)
 	while (err > e1) 
 	{
 		
-		vych = vych + pow(-1, k)*pow(y, 2 * k) / factorial(2 * k); 
+		vych = vych + pow(-1, k)*pow(y, 2 * k) / factorial(2 * k); //Разложение функции cos в ряд
 		err = pow(y, 2 * k) / factorial(2 * k);
 		k++;
 	}
@@ -62,7 +62,7 @@ double mySh(double x)
 	while (err > e2)
 	{
 		
-		vych = vych + pow(t, 2 * k + 1) / factorial(2 * k + 1); 
+		vych = vych + pow(t, 2 * k + 1) / factorial(2 * k + 1); //Разложение функции sh в ряд
 		err = pow(t, 2 * k + 1) / factorial(2 * k + 1);
 		k++;
 	}

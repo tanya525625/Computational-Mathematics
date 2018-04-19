@@ -1,0 +1,10 @@
+﻿  Source.cpp
+  SeidelMethod.cpp
+  QR.cpp
+  Array.cpp
+c:\users\user\source\repos\task 2 - slae\slae\array.cpp(318): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\user\source\repos\task 2 - slae\slae\array.cpp(413): warning C4101: 'tmpSize': unreferenced local variable
+c:\users\user\source\repos\task 2 - slae\slae\array.cpp(424): warning C4101: 'tmpSize': unreferenced local variable
+  Generating Code...
+  SLAE.vcxproj -> C:\Users\User\source\repos\Task 2 - SLAE\Debug\SLAE.exe
+  SLAE.vcxproj -> C:\Users\User\source\repos\Task 2 - SLAE\Debug\SLAE.pdb (Partial PDB)
