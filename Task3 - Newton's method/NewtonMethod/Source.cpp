@@ -26,7 +26,7 @@ int main()
 
 	cout << endl;
 	X = modifiedMethNewt(X, n, F, J, eps);
-	cout << "The solution of the system by Newton's method: " << endl;
+	cout << "The solution of the system by modified Newton's method: " << endl;
 	for (int i = 0; i < n; i++)
 		cout << X[i] << "\t";
 	cout << endl;
@@ -45,7 +45,12 @@ int main()
 		cout << X[i] << "\t";
 	cout << endl;
 
-
+	double y = 0;
+	const int n2 = 1;
+	double eps2 = 0.0001;
+	cout << endl;
+	y = stMethNewt2(y, n2, eps2);
+	cout << "The solution of the system by Newton's method: " << y << endl;
 	
 
 	system("pause");

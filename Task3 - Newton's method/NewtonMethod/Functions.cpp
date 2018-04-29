@@ -127,6 +127,20 @@ Array initializationJ(double* X) //Инициализация
 	return J;
 }
 
+double initializationF2(double x) //Для первого задания
+{
+	double rez = 0;
+	rez = asin(x - 0.2) - x*x;
+	return rez;
+}
+
+double initializationJ2(double x) //Для первого задания
+{
+	double rez = 0;
+	rez = 1 / sqrt(1 - (x - 0.2)*(x - 0.2)) - 2 * x;
+	return rez;
+}
+
 double* approximation(double* x, const int n)
 {
 	double* rez = new double[n];
@@ -134,7 +148,7 @@ double* approximation(double* x, const int n)
 	rez[1] = 0.5; 
 	rez[2] = 1.5;
 	rez[3] = -1; 
-	rez[4] = -0.5;
+	rez[4] = -0.5; //-0.2
 	rez[5] = 1.5; 
 	rez[6] = 0.5; 
 	rez[7] = -0.5; 
@@ -142,6 +156,45 @@ double* approximation(double* x, const int n)
 	rez[9] = -1.5;
 
 	return rez;
+}
+
+double rootlLocalization() //Только для немонотонных функций
+{
+	int a = 0;
+	int b = 1;
+	int N = 10;
+	int k = 0;
+	double x = 0; 
+	double xk = 0;
+	bool isCont = true;
+	while (initializationF2((double)a)*initializationF2((double)b) > 0) //Последовательный перебор
+	{
+		b++;
+		N++;
+		if (N > 100)
+		{
+			a = -1000;
+			b = -999;
+			N = 0;
+		}
+	}
+	double h = 0;
+	h = (double) (b - a) / N;
+	while (isCont == true)
+	{
+		xk = a + k*h;
+		k++;
+		if (k > 150)
+		{
+			h = (b - a) / 2*N;
+			k = 0;
+		}
+		if (initializationF2(x)*initializationF2(xk) < 0)
+			isCont = false;
+		x = xk;
+	} 
+	
+	return x;
 }
 
 double* stMethNewt(double*X, const int n, Array F, Array J, double eps) //Стандартный метод Ньютона - 1
@@ -172,8 +225,6 @@ double* stMethNewt(double*X, const int n, Array F, Array J, double eps) //Станда
 		LU = J.PLU_decomposition();
 		invJ = J.inverseArray(LU[1], isExcist);
 		temp = invJ*F;
-
-
 
 		for (int i = 0; i < n; i++)
 		{
@@ -311,6 +362,7 @@ double* automaticModifiedMethNewt(double*X, const int n, Array F, Array J, doubl
 	}
 
 	int k = 0; //Количество итераций
+	int step = 7;
 	bool isCont = true;
 	double diff = 0;
 	clock_t start = clock();
@@ -320,7 +372,7 @@ double* automaticModifiedMethNewt(double*X, const int n, Array F, Array J, doubl
 	{
 		F = initialization(X);
 
-		if ( diff > eps * 1000 || diff == 0)
+		if ( diff > eps * 1000 || diff == 0 || k != step)
 		{
 			J = initializationJ(X);
 			for (int i = 0; i < n; i++)
@@ -328,7 +380,6 @@ double* automaticModifiedMethNewt(double*X, const int n, Array F, Array J, doubl
 				J.b[i] = -F.arr[i][0];
 			}
 			LU = J.PLU_decomposition();
-
 		}
 		else
 		{
@@ -343,8 +394,7 @@ double* automaticModifiedMethNewt(double*X, const int n, Array F, Array J, doubl
 		diff = 0;
 		for (int i = 0; i < n; i++)
 		{
-			Xk[i] = X[i] + dX[i];
-
+			Xk[i] = X[i] + dX[i];	 
 			if (abs(Xk[i] - X[i]) > diff)
 			{
 				diff = abs(Xk[i] - X[i]);
@@ -431,7 +481,6 @@ double* hybridModifiedMethNewt(double*X, const int n, Array F, Array J, double e
 	return X;
 }
 
-
 double norm(double *x, double* b, int n)
 {
 	double normVal = 0;
@@ -486,3 +535,41 @@ Array convertingVect(Array F, Array L, int* P) //Изменение вектора в соответстви
 	}
 	return rez;
 } 
+
+double stMethNewt2 (double X, const int n, double eps) //Стандартный метод Ньютона - 1
+{
+	double Xk = 0;
+	double invJ;
+	double F;
+	double J;
+	double temp = 0;
+
+	int k = 0;
+	X = rootlLocalization();
+	cout << X << endl;
+	bool isCont = true;
+	double diff = 0;
+	while (isCont == true)
+	{
+		k++;
+		diff = 0;
+		J = initializationJ2(X);
+		F = initializationF2(X);
+
+		invJ = 1/J;
+		temp = invJ*F;
+
+		for (int i = 0; i < n; i++)
+		{
+			Xk = X - temp;
+			diff = abs(Xk - X);
+			X = Xk;
+
+			if (abs(diff) < eps)
+				isCont = false;
+		}
+
+	}
+	cout << "The number of iterations: " << k << endl;
+	return X;
+}
