@@ -1,0 +1,5 @@
+﻿  Array.cpp
+c:\users\user\source\repos\newtonmethod\newtonmethod\array.cpp(356): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\user\source\repos\newtonmethod\newtonmethod\array.cpp(461): warning C4101: 'tmpSize': unreferenced local variable
+  NewtonMethod.vcxproj -> C:\Users\User\source\repos\NewtonMethod\Debug\NewtonMethod.exe
+  NewtonMethod.vcxproj -> C:\Users\User\source\repos\NewtonMethod\Debug\NewtonMethod.pdb (Partial PDB)
