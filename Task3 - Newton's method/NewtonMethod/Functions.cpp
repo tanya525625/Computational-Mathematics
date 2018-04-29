@@ -152,7 +152,6 @@ double* stMethNewt(double*X, const int n, Array F, Array J, double eps) //Станда
 
 	clock_t start = clock();
 	int k = 0;
-	double diff = 0;
 	for (int i = 0; i < n; i++)
 	{
 		Xk[i] = 0;
@@ -163,6 +162,7 @@ double* stMethNewt(double*X, const int n, Array F, Array J, double eps) //Станда
 	Array* LU = new Array[2];
 	bool isExcist = true; //Для невырожд. матрицы
 	bool isCont = true;
+	double diff = 0;
 	while (isCont == true)
 	{
 		k++;
@@ -196,12 +196,11 @@ double* stMethNewt(double*X, const int n, Array F, Array J, double eps) //Станда
 	return X;
 }
 
-double* MethNewt(double*X, const int n, Array F, Array J, double eps, double &diff) //Метод Ньютона Через PLU
+double* MethNewt(double*X, const int n, Array F, Array J, double eps) //Метод Ньютона Через PLU
 {
 	double* dX = new double[n];
 	double* Xk = new double[n];
 	double* tmp = new double[n];
-	double diff = 0;
 	Array* LU = new Array[2];
 	for (int i = 0; i < n; i++)
 	{
@@ -210,6 +209,7 @@ double* MethNewt(double*X, const int n, Array F, Array J, double eps, double &di
 
 	int k = 0; //Количество итераций
 	bool isCont = true;
+	double diff = 0;
 	clock_t start = clock();
 	X = approximation(X, n); //Начальное приближение
 
@@ -245,7 +245,7 @@ double* MethNewt(double*X, const int n, Array F, Array J, double eps, double &di
 	return X;
 }
 
-double* modifiedMethNewt(double*X, const int n, Array F, Array J, double eps, double &diff) //Модифицированный метод Ньютона - 2
+double* modifiedMethNewt(double*X, const int n, Array F, Array J, double eps) //Модифицированный метод Ньютона - 2
 {
 	double* dX = new double[n];
 	double* Xk = new double[n];
@@ -258,13 +258,14 @@ double* modifiedMethNewt(double*X, const int n, Array F, Array J, double eps, do
 		
 	int k = 0; //Количество итераций
 	bool isCont = true;
+	double diff = 0;
 	clock_t start = clock();
 	X = approximation(X, n); //Начальное приближение
 	F = initialization(X);
 	J = initializationJ(X);
 
 	LU = J.PLU_decomposition();
-
+	
 	while (isCont == true)
 	{
 		diff = 0;
@@ -300,7 +301,77 @@ double* modifiedMethNewt(double*X, const int n, Array F, Array J, double eps, do
 
 double* automaticModifiedMethNewt(double*X, const int n, Array F, Array J, double eps)
 {
+	double* dX = new double[n];
+	double* Xk = new double[n];
+	double* tmp = new double[n];
+	Array* LU = new Array[2];
+	for (int i = 0; i < n; i++)
+	{
+		dX[i] = 0;
+	}
 
+	int k = 0; //Количество итераций
+	bool isCont = true;
+	double diff = 0;
+	clock_t start = clock();
+	X = approximation(X, n); //Начальное приближение
+
+	while (isCont == true)
+	{
+		diff = 0;
+		k++;
+		F = initialization(X);
+		J = initializationJ(X);
+		for (int i = 0; i < n; i++)
+		{
+			J.b[i] = -F.arr[i][0];
+		}
+		LU = J.PLU_decomposition();
+		dX = J.SLAE(LU[1], J.b, false);
+		for (int i = 0; i < n; i++)
+		{
+			Xk[i] = X[i] + dX[i];
+
+			if (abs(Xk[i] - X[i]) > diff)
+			{
+				diff = abs(Xk[i] - X[i]);
+			}
+			X[i] = Xk[i];
+		}
+		if (abs(diff) < eps / 2)
+		{
+			diff = 0;
+			k++;
+			F = initialization(X);
+
+			F = convertingVect(F, LU[0], J.P);
+			for (int i = 0; i < n; i++)
+			{
+				J.b[i] = F.arr[i][0];
+			}
+
+			dX = J.SLAE(LU[1], J.b, false);
+			for (int i = 0; i < n; i++)
+			{
+				Xk[i] = X[i] - dX[i];
+				if (abs(Xk[i] - X[i]) > diff)
+				{
+					diff = abs(Xk[i] - X[i]);
+				}
+				X[i] = Xk[i];
+			}
+
+			if (abs(diff) < eps)
+				isCont = false;
+		}
+	}
+	clock_t end = clock();
+	double time = (double)(end - start) / CLOCKS_PER_SEC;
+	cout << "The number of iterations: " << k << endl;
+	cout << "The time of method's implementation: " << time << endl;
+	
+
+	return X;
 }
 
 
