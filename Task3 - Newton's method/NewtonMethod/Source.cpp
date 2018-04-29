@@ -17,12 +17,12 @@ int main()
 		cout << X[i] << "\t";
 	cout << endl;
 
-	cout << endl;
+	/*cout << endl;
 	X = MethNewt(X, n, F, J, eps);
-	cout << "The solution of the system by Newton's method: " << endl;
+	cout << "The solution of the system by Newton's method with PLU: " << endl;
 	for (int i = 0; i < n; i++)
 		cout << X[i] << "\t";
-	cout << endl;
+	cout << endl;*/
 
 	cout << endl;
 	X = modifiedMethNewt(X, n, F, J, eps);
@@ -33,12 +33,17 @@ int main()
 
 	cout << endl;
 	X = automaticModifiedMethNewt(X, n, F, J, eps);
-	cout << "The solution of the system by Newton's method: " << endl;
+	cout << "The solution of the system by automatic Newton's method: " << endl;
 	for (int i = 0; i < n; i++)
 		cout << X[i] << "\t";
 	cout << endl;
 		
-
+	cout << endl;
+	X = hybridModifiedMethNewt(X, n, F, J, eps);
+	cout << "The solution of the system by hybrid Newton's method: " << endl;
+	for (int i = 0; i < n; i++)
+		cout << X[i] << "\t";
+	cout << endl;
 
 
 	

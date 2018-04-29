@@ -53,6 +53,7 @@ public:
 	friend double* automaticModifiedMethNewt(double*X, const int n, Array F, Array J, double eps);
 	friend Array convertingVect(Array F, Array L, int* P);
 	friend double* MethNewt(double*X, const int n, Array F, Array J, double eps);
+	friend double* hybridModifiedMethNewt(double*X, const int n, Array F, Array J, double eps);
 };
 
 

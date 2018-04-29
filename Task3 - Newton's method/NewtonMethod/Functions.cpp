@@ -318,15 +318,95 @@ double* automaticModifiedMethNewt(double*X, const int n, Array F, Array J, doubl
 
 	while (isCont == true)
 	{
-		diff = 0;
-		k++;
 		F = initialization(X);
-		J = initializationJ(X);
+
+		if ( diff > eps * 1000 || diff == 0)
+		{
+			J = initializationJ(X);
+			for (int i = 0; i < n; i++)
+			{
+				J.b[i] = -F.arr[i][0];
+			}
+			LU = J.PLU_decomposition();
+
+		}
+		else
+		{
+			F = (-1) * F;
+			F = convertingVect(F, LU[0], J.P);
+			for (int i = 0; i < n; i++)
+			{
+				J.b[i] = F.arr[i][0];
+			}
+		}
+		dX = J.SLAE(LU[1], J.b, false);
+		diff = 0;
 		for (int i = 0; i < n; i++)
 		{
-			J.b[i] = -F.arr[i][0];
+			Xk[i] = X[i] + dX[i];
+
+			if (abs(Xk[i] - X[i]) > diff)
+			{
+				diff = abs(Xk[i] - X[i]);
+			}
+			X[i] = Xk[i];
 		}
-		LU = J.PLU_decomposition();
+		k++;
+		if (abs(diff) < eps)
+			isCont = false;
+	}
+	clock_t end = clock();
+	double time = (double)(end - start) / CLOCKS_PER_SEC;
+	cout << "The number of iterations: " << k << endl;
+	cout << "The time of method's implementation: " << time << endl;
+	
+
+	return X;
+}
+
+double* hybridModifiedMethNewt(double*X, const int n, Array F, Array J, double eps)
+{
+	double* dX = new double[n];
+	double* Xk = new double[n];
+	double* tmp = new double[n];
+	Array* LU = new Array[2];
+	for (int i = 0; i < n; i++)
+	{
+		dX[i] = 0;
+	}
+
+	int k = 0; //Количество итераций
+	bool isCont = true;
+	double diff = 0;
+	clock_t start = clock();
+	X = approximation(X, n); //Начальное приближение
+
+	while (isCont == true)
+	{
+		diff = 0;
+		int reuser = 2; //Регулятор перехода на модифицированный метод
+		
+		F = initialization(X);
+		
+		if (k % reuser == 0)
+		{
+			J = initializationJ(X);
+			for (int i = 0; i < n; i++)
+			{
+				J.b[i] = -F.arr[i][0];
+			}
+			LU = J.PLU_decomposition();
+			
+		}
+		else
+		{
+			F = (-1) * F;
+			F = convertingVect(F, LU[0], J.P);
+			for (int i = 0; i < n; i++)
+			{
+				J.b[i] = F.arr[i][0];
+			}
+		}
 		dX = J.SLAE(LU[1], J.b, false);
 		for (int i = 0; i < n; i++)
 		{
@@ -338,38 +418,15 @@ double* automaticModifiedMethNewt(double*X, const int n, Array F, Array J, doubl
 			}
 			X[i] = Xk[i];
 		}
-		if (abs(diff) < eps / 2)
-		{
-			diff = 0;
 			k++;
-			F = initialization(X);
-
-			F = convertingVect(F, LU[0], J.P);
-			for (int i = 0; i < n; i++)
-			{
-				J.b[i] = F.arr[i][0];
-			}
-
-			dX = J.SLAE(LU[1], J.b, false);
-			for (int i = 0; i < n; i++)
-			{
-				Xk[i] = X[i] - dX[i];
-				if (abs(Xk[i] - X[i]) > diff)
-				{
-					diff = abs(Xk[i] - X[i]);
-				}
-				X[i] = Xk[i];
-			}
-
 			if (abs(diff) < eps)
 				isCont = false;
-		}
 	}
 	clock_t end = clock();
 	double time = (double)(end - start) / CLOCKS_PER_SEC;
 	cout << "The number of iterations: " << k << endl;
 	cout << "The time of method's implementation: " << time << endl;
-	
+
 
 	return X;
 }
