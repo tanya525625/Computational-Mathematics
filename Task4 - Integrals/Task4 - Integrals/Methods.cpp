@@ -80,6 +80,7 @@ double IKFSpecifiedAccuracy(double a, double b, double aa, double bb, double h)
 		cout << error << endl;
 	}
 	cout << endl;
-	res1 = NewtonCotesMethod(a, b, aa, bb, h);
-	return res1;
+	/*res1 = NewtonCotesMethod(a, b, aa, bb, h);*/
+	return h;
 }
+

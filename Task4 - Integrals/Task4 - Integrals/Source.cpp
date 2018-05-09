@@ -10,21 +10,23 @@ int main()
 	double b = 3.3;
 	int n = 100;
 	double h = (b - a) / n;
-	double approxValue;
-	/*approxValue = middleRectanglesMethod(a, b, n);*/
-	approxValue = NewtonCotesMethod(a, b, aa, bb, h);
+	double res1;
+	res1 = NewtonCotesMethod(a, b, aa, bb, h);
 	cout << "Exact value of the integral: " << exactValue << endl;
 	cout << endl;
 
-	cout << "Value of the integral, which was calculated by Newton-Cotes method: " << approxValue << endl;
-	cout << "The exact error: " << abs(exactValue - approxValue) << endl;
+	cout << "Value of the integral, which was calculated by Newton-Cotes method: " << res1 << endl;
+	cout << "The exact error: " << abs(exactValue - res1) << endl;
 	cout << "The methodical error: " << metodicError << endl;
 	cout << endl;
 
-	double res2 = IKFSpecifiedAccuracy(a, b, aa, bb, h);
+	double h2 = IKFSpecifiedAccuracy(a, b, aa, bb, h);
+	double res2 = NewtonCotesMethod(a, b, aa, bb, h2);
 	cout << "Value of the integral, which was calculated after calculated step by Aitken method: " << res2 << endl;
 	cout << "The exact error: " << abs(exactValue - res2) << endl;
 	cout << endl;
+
+
 
 
 
