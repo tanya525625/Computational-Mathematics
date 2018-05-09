@@ -35,7 +35,7 @@ double NewtonCotesMethod(double a, double b, double aa, double bb, double h)
 		LU = matrix.PLU_decomposition();
 		A = matrix.SLAE(LU[1], matrix.b, false);*/
 
-		A[0] = (m[2] - m[1] * (x[1] + x[2]) + m[0] * x[1] * x[2]) / ((x[1] - x[0])*(x[2] - x[0]));
+		A[0] = (m[2] - m[1] * (x[1] + x[2]) + m[0] * x[1] * x[2]) / ((x[1] - x[0])*(x[2] - x[0])); //Заполнение коэф-ов А
 		A[1] = -(m[2] - m[1] * (x[0] + x[2]) + m[0] * x[0] * x[2]) / ((x[1] - x[0])*(x[2] - x[1]));
 		A[2] = (m[2] - m[1] * (x[1] + x[0]) + m[0] * x[1] * x[0]) / ((x[2] - x[1])*(x[2] - x[0]));
 
@@ -50,7 +50,7 @@ double NewtonCotesMethod(double a, double b, double aa, double bb, double h)
 	return res;
 }
 
-double IKFSpecifiedAccuracy(double a, double b, double aa, double bb, double h)
+double IKFSpecifiedAccuracy(double a, double b, double aa, double bb, double L, double &m, double &Rh2, double h)
 {
 	double res1 = 0;
 	double res2 = 0;
@@ -58,8 +58,6 @@ double IKFSpecifiedAccuracy(double a, double b, double aa, double bb, double h)
 	double iA = a;
 	double iB = a+h;
 	double error = 1;
-	double m = 0;
-	double L = 2;
 	double e = 1e-6;
 	
 	cout << "The rate of convergence by the Aitken rule: " << endl;
@@ -75,12 +73,31 @@ double IKFSpecifiedAccuracy(double a, double b, double aa, double bb, double h)
 		h = h / L;
 		res3 = NewtonCotesMethod(iA, iB, aa, bb, h);
 
-		m = -log(abs((res3 - res2) / (res2 - res1))) / log(L);
-		error = res2 + (res2 - res1) / (pow(L, m) - 1);
-		cout << error << endl;
+		m = -log(abs((res3 - res2) / (res2 - res1))) / log(L); //Вычисление скорости сходимости
+		cout << m << endl;
+		error = res2 + (res2 - res1) / (pow(L, m) - 1); //Погрешность
 	}
+	Rh2 = (res2 - res1) / (pow(L, m) - 1);
 	cout << endl;
-	/*res1 = NewtonCotesMethod(a, b, aa, bb, h);*/
 	return h;
 }
 
+double findHopt(double a, double b, double aa, double bb, double L, double n, double eps)
+{
+	double hOpt = 0;
+	double h = (b-a)/n;
+	double m = 0;
+	double Rh2 = 0;
+	double e = 0.0001;
+	h = IKFSpecifiedAccuracy(a, b, aa, bb, L, m, Rh2, h);
+	h = h*L;
+	/*cout << h << endl;*/
+	hOpt = h*pow(e / abs(Rh2), 1 / m); //Расчет оптимального шага
+	/*cout << hOpt << endl;*/
+	/*hOpt = hOpt * 0.95; *///Замечания для более правильного вычисления
+	/*int k = ceil((b - a) / hOpt);
+	hOpt = (b-a) / k; */
+	/*cout << k << endl;*/
+	/*hOpt = hOpt * 100;*/
+	return hOpt;
+}
