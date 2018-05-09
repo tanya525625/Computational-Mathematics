@@ -61,20 +61,15 @@ int main()
 	
 
 	cout << endl;
-	/*arr3.SeidelMethodSolution(false);*/
 	arr4 = arr4.generPosDeterm();
 	arr4.SeidelMethodSolution(false);
-	/*arr5.SeidelMethodSolution(false);*/
-	
-	/*arr5.SeidelMethodSolution(false);*/
-
 	
 	cout << endl;
-	/*arr3.JacobiMethodSolution(false);*/
+
 	arr4.JacobiMethodSolution(false);
-	/*arr5.JacobiMethodSolution(false);*/
-	//arr5.JacobiMethodSolution(false);
-	
+	Array arr6(true);
+	cout.precision(3);
+	arr6.PLU_decomposition();
 
 	system("pause");
 	return 0;

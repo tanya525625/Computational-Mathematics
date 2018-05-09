@@ -434,7 +434,7 @@ double* hybridModifiedMethNewt(double*X, const int n, Array F, Array J, double e
 	while (isCont == true)
 	{
 		diff = 0;
-		int reuser = 2; //Регулятор перехода на модифицированный метод
+		int reuser = 5; //Регулятор перехода на модифицированный метод
 		
 		F = initialization(X);
 		
@@ -546,7 +546,6 @@ double stMethNewt2 (double X, const int n, double eps) //Стандартный метод Ньюто
 
 	int k = 0;
 	X = rootlLocalization();
-	cout << X << endl;
 	bool isCont = true;
 	double diff = 0;
 	while (isCont == true)

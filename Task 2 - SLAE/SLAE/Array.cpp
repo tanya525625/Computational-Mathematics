@@ -137,10 +137,11 @@ Array Array:: generPosDeterm()
 
 	return rez;
 }
+
 Array::Array (bool isRandom)
 {
 	srand((unsigned int)time(NULL));
-	n = rand() % 50 + 3;
+	n = rand() % 30 + 3;
 	/*n = 5;*/
 	m = n;
 	identArr = new double*[n];
@@ -286,7 +287,7 @@ Array* Array::PLU_decomposition()
 	int maxStr = 0;
 	int k = 0; //Cчетчик для поиска максимального диагонального элемента
 	int num = 0;
-	
+	clock_t start = clock();
 	double tmp = 0;
 	while (k < n)
 	{
@@ -404,7 +405,9 @@ Array* Array::PLU_decomposition()
 	rez[0] = L;
 	rez[1] = U;
 	
-
+	clock_t end = clock();
+	double time = (double)(end - start) / CLOCKS_PER_SEC;
+	cout << "The time of method's implementation: " << time << endl;
 	return rez;
 }
 
