@@ -50,16 +50,16 @@ double NewtonCotesMethod(double a, double b, double aa, double bb, double h)
 	return res;
 }
 
-double IKFSpecifiedAccuracy(double a, double b, double aa, double bb, double L, double &m, double &Rh2, double h)
+double IKFSpecifiedAccuracy(double a, double b, double aa, double bb, double L, double &m, double &Rh2, double h, double e)
 {
 	double res1 = 0;
 	double res2 = 0;
 	double res3 = 0;
+	double m1 = 0; //На первом приближении
+	double Rh21 = 0;
 	double iA = a;
 	double iB = a+h;
 	double error = 1;
-	double e = 1e-6;
-	
 	cout << "The rate of convergence by the Aitken rule: " << endl;
 	while (error > e)
 	{
@@ -75,9 +75,14 @@ double IKFSpecifiedAccuracy(double a, double b, double aa, double bb, double L, 
 
 		m = -log(abs((res3 - res2) / (res2 - res1))) / log(L); //Вычисление скорости сходимости
 		cout << m << endl;
+		if (error == 1)
+		{
+			m1 = m;
+			Rh2 = (res2 - res1) / (pow(L, m) - 1);
+		}
 		error = res2 + (res2 - res1) / (pow(L, m) - 1); //Погрешность
 	}
-	Rh2 = (res2 - res1) / (pow(L, m) - 1);
+	m = m1;
 	cout << endl;
 	return h;
 }
@@ -88,16 +93,10 @@ double findHopt(double a, double b, double aa, double bb, double L, double n, do
 	double h = (b-a)/n;
 	double m = 0;
 	double Rh2 = 0;
-	double e = 0.0001;
-	h = IKFSpecifiedAccuracy(a, b, aa, bb, L, m, Rh2, h);
+	h = IKFSpecifiedAccuracy(a, b, aa, bb, L, m, Rh2, h, eps);
 	h = h*L;
-	/*cout << h << endl;*/
-	hOpt = h*pow(e / abs(Rh2), 1 / m); //Расчет оптимального шага
-	/*cout << hOpt << endl;*/
-	/*hOpt = hOpt * 0.95; *///Замечания для более правильного вычисления
-	/*int k = ceil((b - a) / hOpt);
-	hOpt = (b-a) / k; */
-	/*cout << k << endl;*/
-	/*hOpt = hOpt * 100;*/
+	hOpt = h*pow(eps / abs(Rh2), 1 / m); //Расчет оптимального шага
+	int k = ceil((b - a) / hOpt);
+	hOpt = (b-a) / k; 
 	return hOpt;
 }

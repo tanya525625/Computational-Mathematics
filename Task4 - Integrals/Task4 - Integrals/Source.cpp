@@ -24,8 +24,7 @@ int main()
 	cout << "The methodical error: " << metodicError << endl;
 	cout << endl;
 
-	double h2 = IKFSpecifiedAccuracy(a, b, aa, bb, L,  m, Rh2, h);
-	cout << h2 << endl;
+	double h2 = IKFSpecifiedAccuracy(a, b, aa, bb, L,  m, Rh2, h, eps);
 	double res2 = NewtonCotesMethod(a, b, aa, bb, h2);
 	cout << "Value of the integral, which was calculated after calculated step by Aitken method: " << res2 << endl;
 	cout << "The exact error: " << abs(exactValue - res2) << endl;
@@ -36,10 +35,6 @@ int main()
 	int n3 = 4;
 	
 	double hOpt = findHopt(a, b, aa, bb, L, n1, eps);
-	cout << hOpt << endl;
-	hOpt = IKFSpecifiedAccuracy(a, b, aa, bb, L, m, Rh2, hOpt);
-	cout << hOpt << endl;
-	/*b = b + hOpt;*/
 	double res3 = NewtonCotesMethod(a, b, aa, bb, hOpt);
 	cout << "Value of the integral, which was calculated after calculated Optimal step: " << res3 << endl;
 	cout << "The exact error: " << abs(exactValue - res3) << endl;
