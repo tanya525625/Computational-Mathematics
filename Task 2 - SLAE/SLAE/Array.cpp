@@ -114,7 +114,7 @@ Array::~Array()
 Array Array:: generPosDeterm()
 {
 	Array temp(true);
-	Array rez(temp.n, temp.n);
+	Array res(temp.n, temp.n);
 	Array mult(temp.n, temp.n);
 	Array* LU = new Array[2];
 	Array invArr(temp.n, temp.n);
@@ -123,19 +123,19 @@ Array Array:: generPosDeterm()
 	bool isExcist = 1;
 	invArr = temp.inverseArray(LU[1], isExcist);
 	for (int i = 0; i < temp.n; i++)
-		rez.arr[i][i] = i + 1;
-	mult = temp*rez;
-	rez = mult*invArr;
-	/*rez.print();*/
+		res.arr[i][i] = i + 1;
+	mult = temp*res;
+	res = mult*invArr;
+	/*res.print();*/
 
 	for (int i = 0; i < temp.n; i++)
 	{
-		rez.b[i] = temp.b[i];
-		/*cout << rez.b[i] << endl;*/
+		res.b[i] = temp.b[i];
+		/*cout << res.b[i] << endl;*/
 	}
 		
 
-	return rez;
+	return res;
 }
 
 Array::Array (bool isRandom)
@@ -212,7 +212,7 @@ void Array::printB()
 
 Array operator *(Array &a1, Array &a2)
 {
-	Array rez(a1.n, a2.m);
+	Array res(a1.n, a2.m);
 
 	if (a1.m == a2.n)
 	{
@@ -222,7 +222,7 @@ Array operator *(Array &a1, Array &a2)
 			{
 				for (int k = 0; k < a2.n; k++)
 				{
-					rez.arr[i][j] += a1.arr[i][k] * a2.arr[k][j];
+					res.arr[i][j] += a1.arr[i][k] * a2.arr[k][j];
 				}
 			}
 		}
@@ -233,35 +233,35 @@ Array operator *(Array &a1, Array &a2)
 		cout << "ERROR. Matrices can not be multiplied" << endl;
 
 	}*/
-	rez.nullTest();
-	return rez;
+	res.nullTest();
+	return res;
 }
 
 Array operator *(double c, Array a)
 {
-	Array rez = a;
-	for (int i = 0; i < rez.n; i++)
-		for (int j = 0; j < rez.m; j++)
-			rez.arr[i][j] = rez.arr[i][j] * c;
-	return rez;
+	Array res = a;
+	for (int i = 0; i < res.n; i++)
+		for (int j = 0; j < res.m; j++)
+			res.arr[i][j] = res.arr[i][j] * c;
+	return res;
 }
 
 double* operator *(Array a, double*  x) //Умножение матрицы на вектор
 {
-	double* rez = new double[a.n];
+	double* res = new double[a.n];
 	if (a.m == a.n)
 	{
 		for (int i = 0; i < a.n; i++)
 			for (int j = 0; j < a.m; j++)
 			{
-				rez[i] += a.arr[i][j] * x[j];
-				/*cout << rez[i] << endl;*/
+				res[i] += a.arr[i][j] * x[j];
+				/*cout << res[i] << endl;*/
 			}
 				
 		
 	}
 	
-	return rez;
+	return res;
 }
 
 bool operator == (Array a1, Array a2)
@@ -279,7 +279,7 @@ bool operator == (Array a1, Array a2)
 
 Array* Array::PLU_decomposition()
 {
-	Array* rez = new Array[2];
+	Array* res = new Array[2];
 	double max = 0;
 	Array L(n, m);
 	Array U (n, m) ;
@@ -402,13 +402,13 @@ Array* Array::PLU_decomposition()
 	}
 		
 
-	rez[0] = L;
-	rez[1] = U;
+	res[0] = L;
+	res[1] = U;
 	
 	clock_t end = clock();
 	double time = (double)(end - start) / CLOCKS_PER_SEC;
 	cout << "The time of method's implementation: " << time << endl;
-	return rez;
+	return res;
 }
 
 Array Array:: transpose()
@@ -536,7 +536,7 @@ int Array::rank(Array U)
 
 Array Array::inverseArray(Array U, bool &isExcist)
 {
-	Array rez(n, m);
+	Array res(n, m);
 	double** newIdentArr = new double*[n]; //Создание динамического двумерного массива для преобразованной ед. м-цы
 	for (int i = 0; i < n; i++)
 	{
@@ -552,21 +552,21 @@ Array Array::inverseArray(Array U, bool &isExcist)
 	{
 		newIdentArr = transposeArr(identArr); //Транспонирование единичной матрицы
 		for (int i = 0; i < n; i++) //Решение СЛАУ
-			rez.arr[i] = SLAE(U, newIdentArr[i], false);
-		rez = rez.transpose(); //Транспонирование полученной матрицы
+			res.arr[i] = SLAE(U, newIdentArr[i], false);
+		res = res.transpose(); //Транспонирование полученной матрицы
 
 		Array comp1;
 		Array comp2;
-		comp1 = comp1 * rez;
-		comp2 = rez * comp2;
+		comp1 = comp1 * res;
+		comp2 = res * comp2;
 		comp1.nullTest();
 		comp2.nullTest();
-		rez.nullTest();
+		res.nullTest();
 		if (comp1 == comp2)
 			cout << "The inverse matrix is obtained. Check is successful" << endl;
 	}
 
-	return rez;
+	return res;
 }
 
 double* Array::SLAE(Array U, double* b, bool isPrint)
@@ -584,9 +584,9 @@ double* Array::SLAE(Array U, double* b, bool isPrint)
 
 	int rankExt = extArr.rank(extArr); // Ранг расширенной матрицы
 	int rankInit = rank(U); //Ранг исходной матрицы
-	double* rez = new double[m];
+	double* res = new double[m];
 	for (int i = 0; i < m; i++)
-		rez[i] = 0;
+		res[i] = 0;
 	double sum = 0;
 		
 	if (rankExt == rankInit)  // Теорема Кронекера — Капелли
@@ -594,7 +594,7 @@ double* Array::SLAE(Array U, double* b, bool isPrint)
 		if (m > n)
 		{
 			for (int i = m - 1; i > n-1; i--)
-				rez[i] = 0;			
+				res[i] = 0;			
 
 		}
 		/*else
@@ -605,26 +605,26 @@ double* Array::SLAE(Array U, double* b, bool isPrint)
 				sum = 0;
 				for (j = 0; j < m; j++) 
 				{
-					sum = sum + rez[j] * U.arr[i][j];
+					sum = sum + res[j] * U.arr[i][j];
 				}
 				if (U.arr[i][i] != 0)
-					rez[i] = (b[i] - sum) / U.arr[i][i];
+					res[i] = (b[i] - sum) / U.arr[i][i];
 				else														
 				{
-					rez[n+i-rankInit] = (b[i] - sum) / U.arr[i][lead[i]];   //Для вырожденных систем
+					res[n+i-rankInit] = (b[i] - sum) / U.arr[i][lead[i]];   //Для вырожденных систем
 				}
 				
 				if (m > n)
 				{
-					rez[i+1] = b[i]/U.arr[i][i+1];
-					rez[i] = 0;
+					res[i+1] = b[i]/U.arr[i][i+1];
+					res[i] = 0;
 				}
 			}
 
 			for (int i = 0; i < n; i++)
 			{
-				if (abs(rez[i]) <= 1e-8) //Проверка на отрицательный ноль
-					rez[i] = abs(rez[i]);
+				if (abs(res[i]) <= 1e-8) //Проверка на отрицательный ноль
+					res[i] = abs(res[i]);
 			}
 
 			if (isPrint == true)
@@ -634,11 +634,11 @@ double* Array::SLAE(Array U, double* b, bool isPrint)
 				else
 					cout << "The solution: " << endl;
 				for (int i = 0; i < m; i++)
-					cout << rez[i] << endl;
+					cout << res[i] << endl;
 			}
 			bool isOk = true;
 			for (int i = 0; i < n; i++)
-				if (((U*rez)[i] - b[i]) >= 1e-10)
+				if (((U*res)[i] - b[i]) >= 1e-10)
 					isOk = false;
 			if (isOk == true && isPrint == true)
 				cout << "The solution of the SLAE is obtained. Check is successful" << endl;
@@ -650,17 +650,17 @@ double* Array::SLAE(Array U, double* b, bool isPrint)
 
 	
 	
-	return rez;
+	return res;
 }
 
 double* Array::resultSLAE(Array U, bool isPrint) // Для внешнего вызова функции SLAE
 {
-	double* rez = new double[n];
+	double* res = new double[n];
 	for (int i = 0; i < n; i++)
-		rez[i] = 0;
-	rez = SLAE(U, b, isPrint);
+		res[i] = 0;
+	res = SLAE(U, b, isPrint);
 
-	return rez;
+	return res;
 }
 
 void Array::nullTest() //Избежание ошибки отрицательного 0
@@ -729,55 +729,55 @@ Array Array::createIdentArr()
 
 Array* Array::QR_decomposition()
 {
-	Array* rez = new Array[2];
+	Array* res = new Array[2];
 	if (m == n)
 	{
 		QR QRDecArr((*this), n);
 		QRDecArr.decomposition();
-		rez[0] = QRDecArr.Q;
-		rez[1] = QRDecArr.R;
+		res[0] = QRDecArr.Q;
+		res[1] = QRDecArr.R;
 		for (int i=0; i<n; i++)
 			b[i] = QRDecArr.b[i];
 	}
 	else
 		cout << "QR_decomposition is impossible" << endl;
-	/*rez[0].print();
-	rez[1].print();*/
-	return rez;
+	/*res[0].print();
+	res[1].print();*/
+	return res;
 }
 
 double* Array::SeidelMethodSolution(bool isPrint)
 {
-	double* rez = new double[m];
+	double* res = new double[m];
 	for (int i = 0; i < m; i++)
-		rez[i] = 0;
+		res[i] = 0;
 	SeidelMethod solution(*this);
 
-	rez = solution.SLAESolution();
+	res = solution.SLAESolution();
 	if (isPrint == true)
 	{
 		for (int i = 0; i < m; i++)
-			cout << rez[i] << endl;
+			cout << res[i] << endl;
 	}
 
 	
 	
-	return rez;
+	return res;
 }
 
 double* Array::JacobiMethodSolution(bool isPrint)
 {
-	double* rez = new double[m];
+	double* res = new double[m];
 	for (int i = 0; i < m; i++)
-		rez[i] = 0;
+		res[i] = 0;
 	SeidelMethod solution(*this);
 
-	rez = solution.SLAEJacobiSolution();
+	res = solution.SLAEJacobiSolution();
 	if (isPrint == true)
 	{
 		for (int i = 0; i < m; i++)
-			cout << rez[i] << endl;
+			cout << res[i] << endl;
 	}
 
-	return rez;
+	return res;
 }

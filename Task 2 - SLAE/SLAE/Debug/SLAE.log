@@ -1,3 +1,6 @@
-﻿  Source.cpp
+﻿  Array.cpp
+c:\users\user\source\repos2\computational-mathematics\task 2 - slae\slae\array.cpp(319): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\user\source\repos2\computational-mathematics\task 2 - slae\slae\array.cpp(416): warning C4101: 'tmpSize': unreferenced local variable
+c:\users\user\source\repos2\computational-mathematics\task 2 - slae\slae\array.cpp(427): warning C4101: 'tmpSize': unreferenced local variable
   SLAE.vcxproj -> C:\Users\User\source\Repos2\Computational-Mathematics\Task 2 - SLAE\Debug\SLAE.exe
   SLAE.vcxproj -> C:\Users\User\source\Repos2\Computational-Mathematics\Task 2 - SLAE\Debug\SLAE.pdb (Partial PDB)
