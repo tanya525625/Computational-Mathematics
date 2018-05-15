@@ -22,3 +22,4 @@ double findHopt(double a, double b, double aa, double bb, double L, double n, do
 void sort(double* data, int lenD);
 double IKFSpecifiedAccuracyGauss(double a, double b, double aa, double bb, double L, double &m, double &Rh2, double h, double e);
 double findHoptGauss(double a, double b, double aa, double bb, double L, double n, double eps);
+

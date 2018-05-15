@@ -12,7 +12,7 @@ int main()
 	double bb = 0;
 	double b = 3.3;
 	double L = 2;
-	int n = 100;
+	int n = 3;
 	double h = (b - a) / n;
 	double res1;
 	res1 = NewtonCotesMethod(a, b, aa, bb, h);
@@ -57,7 +57,7 @@ int main()
 	int n2 = 1;
 	hOpt = findHoptGauss(a, b, aa, bb, L, n2, eps);
 	res5 = GaussMethod(a, b, aa, bb, hOpt);
-	cout << "Value of the integral, which was calculated after calculated Optimal step: " << res5 << endl;
+	cout << "Value of the integral, which was calculated after  Optimal step: " << res5 << endl;
 	cout << "The exact error: " << abs(exactValue - res5) << endl;
 	cout << endl;
 

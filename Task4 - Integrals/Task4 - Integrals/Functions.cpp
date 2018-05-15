@@ -1,5 +1,6 @@
 #include "Header.h" 
 
+
 double F(double x)
 {
 	double aa = 2 / 3;

@@ -1,4 +1,5 @@
 #include "Header.h"
+int st = 4;
 
 double NewtonCotesMethod(double a, double b, double aa, double bb, double h)
 {
@@ -9,7 +10,9 @@ double NewtonCotesMethod(double a, double b, double aa, double bb, double h)
 	double* m = new double[3];
 	double* x = new double[3];
 	double* A = new double[3];
-	while (iB <= b)
+	int k = round((b - a) / h);
+	/*cout << k << endl;*/
+	for (int i=0; i<k; i++)
 	{
 		x[0] = iA; //равномерно распределенные узлы
 		x[1] = (iA + iB) / 2;
@@ -61,27 +64,30 @@ double IKFSpecifiedAccuracy(double a, double b, double aa, double bb, double L, 
 	double iB = a+h;
 	double error = 1;
 	cout << "The rate of convergence by the Aitken rule: " << endl;
-	while (error > e)
+	while (abs(error) > e)
 	{
 		h *= L;
 		iB = a + h;
-		res1 = NewtonCotesMethod(iA, iB, aa, bb, h);
+		res1 = NewtonCotesMethod(a, b, aa, bb, h);
 
 		h = h / L;
-		res2 = NewtonCotesMethod(iA, iB, aa, bb, h);
+		res2 = NewtonCotesMethod(a, b, aa, bb, h);
 
 		h = h / L;
-		res3 = NewtonCotesMethod(iA, iB, aa, bb, h);
+		res3 = NewtonCotesMethod(a, b, aa, bb, h);
 
 		m = -log(abs((res3 - res2) / (res2 - res1))) / log(L); //Вычисление скорости сходимости
 		cout << m << endl;
+		/*cout << res1 << " " << res2 << " " << res3 << endl;*/
 		if (error == 1) //Если первое приближение
 		{
 			m1 = m;
 			Rh2 = (res2 - res1) / (pow(L, m) - 1);
 		}
-		error = res2 + (res2 - res1) / (pow(L, m) - 1); //Погрешность
+		error = (res2 - res1) / (pow(L, m) - 1); //Погрешность
+		/*cout << error << endl;*/
 	}
+	/*cout <<error << endl;*/
 	m = m1;
 	cout << endl;
 	return h;
@@ -105,12 +111,14 @@ double GaussMethod(double a, double b, double aa, double bb, double h)
 	double res = 0;
 	double iA = a;
 	double iB = a + h;
+
 	double* m = new double[6];
 	double* x = new double[3];
 	double* A = new double[3];
 	Array matrix(3, 3);
 	Array* LU = new Array[2];
-	while (iB <= b)
+	int k = round((b - a) / h);
+	for (int i = 0; i<k; i++)
 	{
 		m[0] = moment0(iA, iB, a, b, aa, bb); // Моменты весовой функции
 		m[1] = moment1(iA, iB, a, b, aa, bb, m[0]);
@@ -185,29 +193,30 @@ double IKFSpecifiedAccuracyGauss(double a, double b, double aa, double bb, doubl
 	double m1 = 0; //На первом приближении
 	double Rh21 = 0; //Для дальнейшего вычисления оптимального шага
 	double iA = a;
+	
 	double iB = a + h;
 	double error = 1;
 	cout << "The rate of convergence by the Aitken rule: " << endl;
-	while (error > e)
+	while (abs(error) > e)
 	{
 		h *= L;
 		iB = a + h;
-		res1 = GaussMethod(iA, iB, aa, bb, h);
+		res1 = GaussMethod(a, b, aa, bb, h);
 
 		h = h / L;
-		res2 = GaussMethod(iA, iB, aa, bb, h);
+		res2 = GaussMethod(a, b, aa, bb, h);
 
 		h = h / L;
-		res3 = GaussMethod(iA, iB, aa, bb, h);
+		res3 = GaussMethod(a, b, aa, bb, h);
 
 		m = -log(abs((res3 - res2) / (res2 - res1))) / log(L); //Вычисление скорости сходимости
 		cout << m << endl;
 		if (error == 1) //Если первое приближение
 		{
 			m1 = m;
-			Rh2 = (res2 - res1) / (pow(L, m) - 1);
+			Rh2 = (res2 - res1) / (pow(L, st) - 1);
 		}
-		error = res2 + (res2 - res1) / (pow(L, m) - 1); //Погрешность
+		error = (res2 - res1) / (pow(L, st) - 1); //Погрешность
 	}
 	m = m1;
 	cout << endl;
@@ -217,13 +226,14 @@ double IKFSpecifiedAccuracyGauss(double a, double b, double aa, double bb, doubl
 double findHoptGauss(double a, double b, double aa, double bb, double L, double n, double eps)
 {
 	double h = (b - a) / n;
-	double m = 0;
+	double m = 0; 
 	double Rh2 = 0;
 	h = IKFSpecifiedAccuracyGauss(a, b, aa, bb, L, m, Rh2, h, eps);
 	h = h*L;
-	eps = 1e-3;
-	h = h*pow(eps / abs(Rh2), 1 / m); //Расчет оптимального шага
+	/*eps = 1e-6;*/
+	h = h*pow(eps / abs(Rh2), 1 / st); //Расчет оптимального шага
 	int k = ceil((b - a) / h);
 	h = (b - a) / k;
+	/*cout << h << endl;*/
 	return h;
 }
