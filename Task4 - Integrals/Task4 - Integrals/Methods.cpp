@@ -1,5 +1,5 @@
 #include "Header.h"
-int st = 4;
+int st = 6;
 
 double NewtonCotesMethod(double a, double b, double aa, double bb, double h)
 {
@@ -111,6 +111,7 @@ double GaussMethod(double a, double b, double aa, double bb, double h)
 	double res = 0;
 	double iA = a;
 	double iB = a + h;
+	/*double iB = b;*/
 
 	double* m = new double[6];
 	double* x = new double[3];
@@ -146,10 +147,10 @@ double GaussMethod(double a, double b, double aa, double bb, double h)
 			matrix.b[i] = y[i];
 		LU = matrix.PLU_decomposition();
 		A = matrix.SLAE(LU[1], matrix.b, false);
-		for (int i = 0; i < 3; i++)
+		/*for (int i = 0; i < 3; i++)*/
 
 		x[0] = iA; 
-		x[1] = (iA + iB) / 2;
+		/*x[1] = (iA + iB) / 2;*/
 		x[2] = iB;
 		x = Kardano(A, x);
 		
@@ -173,8 +174,6 @@ double GaussMethod(double a, double b, double aa, double bb, double h)
 			matrix.b[i] = m[i];
 		LU = matrix.PLU_decomposition();
 		A = matrix.SLAE(LU[1], matrix.b, false);
-		/*for (int i = 0; i < 3; i++)
-			cout << A[i] << endl;*/
 		for (int i = 0; i < 3; i++)
 		{
 			res += A[i] * F(x[i]);
@@ -200,13 +199,15 @@ double IKFSpecifiedAccuracyGauss(double a, double b, double aa, double bb, doubl
 	while (abs(error) > e)
 	{
 		h *= L;
-		iB = a + h;
+		/*iB = a + h;*/
 		res1 = GaussMethod(a, b, aa, bb, h);
 
 		h = h / L;
+		/*iB = a + h;*/
 		res2 = GaussMethod(a, b, aa, bb, h);
 
 		h = h / L;
+		/*iB = a + h;*/
 		res3 = GaussMethod(a, b, aa, bb, h);
 
 		m = -log(abs((res3 - res2) / (res2 - res1))) / log(L); //Вычисление скорости сходимости
@@ -214,9 +215,11 @@ double IKFSpecifiedAccuracyGauss(double a, double b, double aa, double bb, doubl
 		if (error == 1) //Если первое приближение
 		{
 			m1 = m;
-			Rh2 = (res2 - res1) / (pow(L, st) - 1);
+			Rh2 = (res2 - res1) / (pow(L, m) - 1);
 		}
-		error = (res2 - res1) / (pow(L, st) - 1); //Погрешность
+		error = (res2 - res1) / (pow(L, m) - 1); //Погрешность
+		/*cout << error << endl;*/
+		/*res1 += (res2 - res1) / (1 - pow(L, -m));*/
 	}
 	m = m1;
 	cout << endl;
@@ -231,7 +234,7 @@ double findHoptGauss(double a, double b, double aa, double bb, double L, double 
 	h = IKFSpecifiedAccuracyGauss(a, b, aa, bb, L, m, Rh2, h, eps);
 	h = h*L;
 	/*eps = 1e-6;*/
-	h = h*pow(eps / abs(Rh2), 1 / st); //Расчет оптимального шага
+	h = h*pow(eps / abs(Rh2), 1 / m); //Расчет оптимального шага
 	int k = ceil((b - a) / h);
 	h = (b - a) / k;
 	/*cout << h << endl;*/

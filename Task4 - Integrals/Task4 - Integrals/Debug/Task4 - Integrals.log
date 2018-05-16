@@ -1,7 +1,7 @@
 ﻿  Methods.cpp
 c:\users\user\source\repos2\computational-mathematics\task4 - integrals\task4 - integrals\methods.cpp(13): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\user\source\repos2\computational-mathematics\task4 - integrals\task4 - integrals\methods.cpp(104): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\user\source\repos2\computational-mathematics\task4 - integrals\task4 - integrals\methods.cpp(120): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\user\source\repos2\computational-mathematics\task4 - integrals\task4 - integrals\methods.cpp(235): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\user\source\repos2\computational-mathematics\task4 - integrals\task4 - integrals\methods.cpp(121): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\user\source\repos2\computational-mathematics\task4 - integrals\task4 - integrals\methods.cpp(238): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   Task4 - Integrals.vcxproj -> C:\Users\User\source\Repos2\Computational-Mathematics\Task4 - Integrals\Debug\Task4 - Integrals.exe
   Task4 - Integrals.vcxproj -> C:\Users\User\source\Repos2\Computational-Mathematics\Task4 - Integrals\Debug\Task4 - Integrals.pdb (Partial PDB)

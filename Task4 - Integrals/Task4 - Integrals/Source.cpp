@@ -41,6 +41,7 @@ int main()
 	double res4;
 	res4 = GaussMethod(a, b, aa, bb, h);
 	metodicError = 0.000617531;
+	/*h = (b - a) / 10;*/
 	cout << "Exact value of the integral: " << res4 << endl;
 	cout << endl;
 	cout << "Value of the integral, which was calculated by Gauss method: " << res4 << endl;
