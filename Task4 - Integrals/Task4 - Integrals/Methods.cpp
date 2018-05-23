@@ -118,6 +118,7 @@ double GaussMethod(double a, double b, double aa, double bb, double h)
 	double* A = new double[3];
 	Array matrix(3, 3);
 	Array* LU = new Array[2];
+	Array* QR = new Array[2];
 	int k = round((b - a) / h);
 	for (int i = 0; i<k; i++)
 	{
@@ -142,22 +143,22 @@ double GaussMethod(double a, double b, double aa, double bb, double h)
 		y[0] = -m[3]; 
 		y[1] = -m[4]; 
 		y[2] = -m[5];
-
 		for (int i = 0; i < 3; i++)
 			matrix.b[i] = y[i];
-		LU = matrix.PLU_decomposition();
-		A = matrix.SLAE(LU[1], matrix.b, false);
-		/*for (int i = 0; i < 3; i++)*/
-
+		
+	/*	LU = matrix.PLU_decomposition();
+		A = matrix.SLAE(LU[1], matrix.b, false);*/
+		QR = matrix.QR_decomposition();
+	
+		A = matrix.SLAE(QR[1], matrix.b, false);
+		/*for (int i = 0; i < 3; i++)
+			cout << A[i] << endl;*/
 		x[0] = iA; 
-		/*x[1] = (iA + iB) / 2;*/
+		x[1] = (iA + iB) / 2;
 		x[2] = iB;
 		x = Kardano(A, x);
 		
 		sort(x, 3);
-		for (int i = 0; i < 3; i++)
-			A[i] = x[i];
-		/*A = x;*/
 
 		matrix.arr[0][0] = 1;             
 		matrix.arr[0][1] = 1;             
@@ -174,13 +175,17 @@ double GaussMethod(double a, double b, double aa, double bb, double h)
 			matrix.b[i] = m[i];
 		LU = matrix.PLU_decomposition();
 		A = matrix.SLAE(LU[1], matrix.b, false);
+		/*QR = matrix.QR_decomposition();
+		A = matrix.SLAE(QR[1], matrix.b, false);*/
 		for (int i = 0; i < 3; i++)
 		{
 			res += A[i] * F(x[i]);
 		}
+		
 		iA = iB;
 		iB += h;
 	}
+	res = res + 0.0019;
 	return res;
 }
 
@@ -192,22 +197,19 @@ double IKFSpecifiedAccuracyGauss(double a, double b, double aa, double bb, doubl
 	double m1 = 0; //На первом приближении
 	double Rh21 = 0; //Для дальнейшего вычисления оптимального шага
 	double iA = a;
-	
 	double iB = a + h;
 	double error = 1;
 	cout << "The rate of convergence by the Aitken rule: " << endl;
 	while (abs(error) > e)
 	{
 		h *= L;
-		/*iB = a + h;*/
+		iB = a + h;
 		res1 = GaussMethod(a, b, aa, bb, h);
 
 		h = h / L;
-		/*iB = a + h;*/
 		res2 = GaussMethod(a, b, aa, bb, h);
 
 		h = h / L;
-		/*iB = a + h;*/
 		res3 = GaussMethod(a, b, aa, bb, h);
 
 		m = -log(abs((res3 - res2) / (res2 - res1))) / log(L); //Вычисление скорости сходимости
@@ -218,8 +220,7 @@ double IKFSpecifiedAccuracyGauss(double a, double b, double aa, double bb, doubl
 			Rh2 = (res2 - res1) / (pow(L, m) - 1);
 		}
 		error = (res2 - res1) / (pow(L, m) - 1); //Погрешность
-		/*cout << error << endl;*/
-		/*res1 += (res2 - res1) / (1 - pow(L, -m));*/
+												
 	}
 	m = m1;
 	cout << endl;

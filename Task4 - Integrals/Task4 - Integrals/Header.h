@@ -1,7 +1,9 @@
 #pragma once
 #include <iostream>
 #include <cmath>
+#include <ctime>
 #include "Array.h"
+#include "QR.h"
 
 const double pi = 4.*atan(1.);
 

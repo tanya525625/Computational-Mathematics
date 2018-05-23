@@ -697,3 +697,21 @@ Array Array::createIdentArr()
 	return identArr;
 }
 
+Array* Array::QR_decomposition()
+{
+	Array* res = new Array[2];
+	if (m == n)
+	{
+		QR QRDecArr((*this), n);
+		QRDecArr.decomposition();
+		res[0] = QRDecArr.Q;
+		res[1] = QRDecArr.R;
+		for (int i = 0; i<n; i++)
+			b[i] = QRDecArr.b[i];
+	}
+	else
+		cout << "QR_decomposition is impossible" << endl;
+	/*res[0].print();
+	res[1].print();*/
+	return res;
+}

@@ -111,13 +111,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\repos\NewtonMethod\NewtonMethod\Array.h" />
+    <ClInclude Include="Array.h" />
     <ClInclude Include="Header.h" />
+    <ClInclude Include="QR.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\repos\NewtonMethod\NewtonMethod\Array.cpp" />
+    <ClCompile Include="Array.cpp" />
     <ClCompile Include="Functions.cpp" />
     <ClCompile Include="Methods.cpp" />
+    <ClCompile Include="QR.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

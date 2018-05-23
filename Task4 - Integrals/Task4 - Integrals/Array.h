@@ -46,14 +46,7 @@ public:
 	double norm();
 	double conditionNumber(Array U);
 	Array createIdentArr();
-	friend Array initialization(double* X);
-	friend Array initializationJ(double* X);
-	friend double* stMethNewt(double*X, const int n, Array F, Array J, double eps);
-	friend double* modifiedMethNewt(double*X, const int n, Array F, Array J, double eps);
-	friend double* automaticModifiedMethNewt(double*X, const int n, Array F, Array J, double eps);
-	friend Array convertingVect(Array F, Array L, int* P);
-	friend double* MethNewt(double*X, const int n, Array F, Array J, double eps);
-	friend double* hybridModifiedMethNewt(double*X, const int n, Array F, Array J, double eps);
+	Array* QR_decomposition();
 };
 
 

@@ -2,11 +2,11 @@
 
 int main()
 {
-	double exactValue = 7.71357;
+	double exactValue = 20.7303;
 	double metodicError = 0.0043;
-	double eps = 1e-6;
+	double eps = 1e-4;
 	double a = 2.5;
-	double aa = 2 / 3;
+	double aa = 2 / 3.0;
 	double m = 0;
 	double Rh2 = 0;
 	double bb = 0;
@@ -41,8 +41,9 @@ int main()
 	double res4;
 	res4 = GaussMethod(a, b, aa, bb, h);
 	metodicError = 0.000617531;
-	/*h = (b - a) / 10;*/
-	cout << "Exact value of the integral: " << res4 << endl;
+	n = 4;
+	h = (b - a) / n;
+	cout << "Exact value of the integral: " << exactValue << endl;
 	cout << endl;
 	cout << "Value of the integral, which was calculated by Gauss method: " << res4 << endl;
 	cout << "The exact error: " << abs(exactValue - res4) << endl;
@@ -55,7 +56,7 @@ int main()
 	cout << "The exact error: " << abs(exactValue - res5) << endl;
 	cout << endl;
 
-	int n2 = 1;
+	int n2 = 4;
 	hOpt = findHoptGauss(a, b, aa, bb, L, n2, eps);
 	res5 = GaussMethod(a, b, aa, bb, hOpt);
 	cout << "Value of the integral, which was calculated after  Optimal step: " << res5 << endl;
