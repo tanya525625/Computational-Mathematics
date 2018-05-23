@@ -210,6 +210,13 @@ void Array::printB()
 
 }
 
+void Array::printP()
+{
+	for (int i = 0; i < n; i++)
+		cout << P[i] << endl;
+
+}
+
 Array operator *(Array &a1, Array &a2)
 {
 	Array res(a1.n, a2.m);

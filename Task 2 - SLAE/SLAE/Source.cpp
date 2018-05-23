@@ -59,6 +59,7 @@ int main()
 	Array arr4;
 	Array arr5;
 	
+	arr1.printP();
 
 	cout << endl;
 	arr4 = arr4.generPosDeterm();

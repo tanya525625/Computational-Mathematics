@@ -22,6 +22,7 @@ public:
 	~Array();
 	void print();
 	void printB();
+	void printP();
 	Array* PLU_decomposition();
 	Array generPosDeterm();
 	Array transposition(int* P);
